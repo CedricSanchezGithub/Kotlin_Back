@@ -1,10 +1,10 @@
 package org.example.kotlin_back.service
 
-import org.example.kotlin_back.repository.AnimalRepository
+import org.example.kotlin_back.repository.NetflixRepository
 import org.springframework.stereotype.Service
 
 @Service
-class AnimalService(val animalRepository: AnimalRepository) {
+class NetflixService(val netflixRepository: NetflixRepository) {
 
 
 
