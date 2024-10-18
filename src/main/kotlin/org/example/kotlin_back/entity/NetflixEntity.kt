@@ -4,14 +4,14 @@ import jakarta.persistence.*
 
 
 @Entity
-@Table(name = "movies")
+@Table(name = "netflix")
 data class NetflixEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int? = 0,
+    var id: Int? = null,
 
     @Column
-    var movieName: String? = "rien",
+    var movie: String? = "rien",
 
     @Column(name = "espece", nullable = false)
     var country: String? = "rien",
