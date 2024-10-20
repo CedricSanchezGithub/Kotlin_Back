@@ -12,13 +12,13 @@ class AnimalController(val netflixService: NetflixService) {
 
     @GetMapping("/getmovies")
     fun getAllMoviesDatas(): List<NetflixEntity> {
-        println("récupération des données")
+        println("Lancement de la fonction getmovies")
         return netflixService.readAllMovies()
     }
 
     @PostMapping("/postmovies")
     fun postMovies(@RequestBody listNetflixEntity: List<NetflixEntity>) {
-        println("envoie des données au serveur")
+        println("Lancement de la fonction postmovies")
         return netflixService.postAllMovies(listNetflixEntity)
     }
 }

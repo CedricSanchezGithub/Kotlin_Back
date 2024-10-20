@@ -10,10 +10,10 @@ data class NetflixEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null,
 
-    @Column
-    var movie: String? = "rien",
+    @Column(name = "movie", nullable = false)
+    var movie: String? = "aucune donnée pour movie",
 
-    @Column(name = "espece", nullable = false)
-    var country: String? = "rien",
+    @Column(name = "country", nullable = false)
+    var country: String? = "aucune donnée pour country",
 
 )
