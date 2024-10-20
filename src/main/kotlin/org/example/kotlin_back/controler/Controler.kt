@@ -16,4 +16,9 @@ class AnimalController(val netflixService: NetflixService) {
         return netflixService.readAllMovies()
     }
 
+    @PostMapping("/postmovies")
+    fun postMovies(@RequestBody listNetflixEntity: List<NetflixEntity>) {
+        println("envoie des données au serveur")
+        return netflixService.postAllMovies(listNetflixEntity)
+    }
 }
