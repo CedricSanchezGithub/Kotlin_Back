@@ -4,6 +4,8 @@ import org.example.kotlin_back.entity.NetflixEntity
 import org.example.kotlin_back.service.NetflixService
 import org.springframework.web.bind.annotation.*
 
+// http://localhost:8081/netflix/getmovies
+
 @RestController
 @RequestMapping("/netflix")
 class AnimalController(val netflixService: NetflixService) {
