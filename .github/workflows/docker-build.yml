@@ -1,0 +1,56 @@
+name: Docker Build and Push  # Nom de l'action GitHub
+
+on:  # Déclencheurs de l'action
+  push:  # Sur les actions de push
+    branches:  # Pour les branches spécifiques
+      - master  # Branche master
+  workflow_dispatch:  # Permet le déclenchement manuel
+
+jobs:  # Définition des jobs
+  build:  # Nom du job
+    runs-on: ubuntu-latest  # Environnement sur lequel le job s'exécute
+
+    steps:  # Étapes du job
+      - name: Checkout code  # Nom de l'étape
+        uses: actions/checkout@v2  # Action pour récupérer le code source
+
+      - name: Set up JDK 17  # Nom de l'étape
+        uses: actions/setup-java@v2  # Action pour installer Java
+        with:  # Paramètres pour l'installation de Java
+          distribution: 'adopt'  # Distribution AdoptOpenJDK
+          java-version: '17'  # Version de Java
+
+      - name: Cache Gradle packages  # Nom de l'étape
+        uses: actions/cache@v2  # Action pour mettre en cache des dépendances
+        with:  # Paramètres du cache
+          path: ~/.gradle/caches  # Chemin vers le cache Gradle
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          # Clé du cache basée sur le système d'exploitation et les fichiers Gradle
+          restore-keys: |  # Clés de restauration si la clé principale n'est pas trouvée
+            ${{ runner.os }}-gradle-
+
+      - name: Grant execute permission for gradlew  # Nom de l'étape
+        run: chmod +x ./gradlew  # Commande pour donner les permissions d'exécution au script Gradlew
+
+      - name: Build with Gradle  # Nom de l'étape
+        run: ./gradlew bootJar  # Commande pour construire le projet avec Gradle
+
+      - name: Set up Docker Buildx  # Nom de l'étape
+        uses: docker/setup-buildx-action@v1  # Action pour configurer Docker Buildx
+
+      - name: Login to Docker Hub  # Nom de l'étape
+        uses: docker/login-action@v1  # Action pour se connecter à Docker Hub
+        with:  # Paramètres de connexion
+          username: ${{ secrets.DOCKER_USERNAME }}  # Nom d'utilisateur Docker Hub stocké dans les secrets
+          password: ${{ secrets.DOCKER_PASSWORD }}  # Mot de passe Docker Hub stocké dans les secrets
+
+      - name: Build and push Docker image  # Nom de l'étape
+        uses: docker/build-push-action@v2  # Action pour construire et pousser l'image Docker
+        with:  # Paramètres de construction et de push
+          context: .  # Contexte de construction Docker (le répertoire courant)
+          push: true  # Indique que l'image doit être poussée vers le registre Docker
+          platforms: linux/amd64,linux/arm64  # Plateformes cibles pour l'image Docker
+          tags: |
+            cedsanc/openfoodbackend:latest
+            cedsanc/openfoodbackend:${{ github.run_number }}-${{ github.sha }}
+          # permet d’avoir toujours les anciennes versions en réserve, au cas où le dernier build soit problématique

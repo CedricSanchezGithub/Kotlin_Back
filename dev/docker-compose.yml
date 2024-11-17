@@ -4,7 +4,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: kotlin       # Nom de la base de données
+      MYSQL_DATABASE: openfood_db       # Nom de la base de données
     ports:
       - "3306:3306"  # Map le port 3306 du container au 3306 de la machine hôte
     volumes:
